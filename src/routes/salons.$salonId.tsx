@@ -71,7 +71,7 @@ function SalonProfile() {
       {/* Gallery */}
       <section className="px-6 lg:px-10 mx-auto max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {salon.gallery.map((src, i) => (
+          {salon.gallery.map((src: string, i: number) => (
             <div key={i} className={`relative overflow-hidden rounded-2xl ${i === 0 ? "md:col-span-2 md:row-span-2 aspect-[16/10]" : "aspect-square"}`}>
               <img src={src} alt={`${salon.name} interior ${i + 1}`} loading={i === 0 ? "eager" : "lazy"} className="w-full h-full object-cover" />
             </div>
@@ -85,7 +85,7 @@ function SalonProfile() {
           <h2 className="font-display text-3xl text-foreground">Services</h2>
           <p className="text-sm text-muted-foreground mt-1">Tap to select before booking.</p>
           <ul className="mt-6 divide-y divide-border border border-border rounded-2xl overflow-hidden">
-            {salon.services.map((s) => {
+            {salon.services.map((s: Service) => {
               const active = selectedService.name === s.name;
               return (
                 <li key={s.name}>

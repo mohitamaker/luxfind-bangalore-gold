@@ -27,7 +27,7 @@ function Booking() {
   const [confirmed, setConfirmed] = useState(false);
 
   const service =
-    salon.services.find((s) => s.name === serviceName) ?? salon.services[0];
+    salon.services.find((s: { name: string }) => s.name === serviceName) ?? salon.services[0];
   const cost = service.price;
   const platformFee = Math.round(cost * 0.1);
   const total = cost + platformFee;
