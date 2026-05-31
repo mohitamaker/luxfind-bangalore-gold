@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { FeaturedSalons } from "@/components/site/FeaturedSalons";
+import { Chatbot } from "@/components/site/Chatbot";
+import { filterSalons, salons } from "@/lib/salons";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,14 +27,22 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [query, setQuery] = useState({ area: "", service: "" });
+
+  const filtered = useMemo(() => {
+    if (!query.area && !query.service) return salons;
+    return filterSalons(query.area, query.service);
+  }, [query]);
+
   return (
     <main className="relative min-h-screen bg-background">
       <Navbar />
-      <Hero />
-      <FeaturedSalons />
+      <Hero onSearch={(area, service) => setQuery({ area, service })} />
+      <FeaturedSalons salons={filtered} query={query} />
       <footer className="border-t border-border py-10 text-center text-xs uppercase tracking-[0.3em] text-muted-foreground">
         © {new Date().getFullYear()} Maison · Bangalore
       </footer>
+      <Chatbot />
     </main>
   );
 }
