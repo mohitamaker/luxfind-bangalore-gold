@@ -95,8 +95,53 @@ function SalonProfileContent({ salon }: { salon: Salon }) {
         </div>
       </section>
 
-      <section className="px-6 lg:px-10 mx-auto max-w-7xl py-20 grid lg:grid-cols-2 gap-12">
-        <div>
+      <SalonTabs salon={salon} selectedService={selectedService} setSelectedService={setSelectedService} selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} bookNow={bookNow} slots={slots} />
+
+      <Chatbot />
+    </main>
+  );
+}
+
+type TabKey = "services" | "stylists" | "booking";
+
+function SalonTabs({
+  salon, selectedService, setSelectedService, selectedSlot, setSelectedSlot, bookNow, slots,
+}: {
+  salon: Salon;
+  selectedService: Service;
+  setSelectedService: (s: Service) => void;
+  selectedSlot: string | null;
+  setSelectedSlot: (s: string) => void;
+  bookNow: () => void;
+  slots: ReturnType<typeof generateSlots>;
+}) {
+  const [tab, setTab] = useState<TabKey>("services");
+  const stylists = getStylists(salon.id);
+
+  return (
+    <section className="px-6 lg:px-10 mx-auto max-w-7xl py-16">
+      <div className="flex items-center gap-2 border-b border-border mb-10 overflow-x-auto">
+        {([
+          { k: "services", label: "Services & Pricing" },
+          { k: "stylists", label: "Meet the Stylists" },
+          { k: "booking", label: "Pick a Time" },
+        ] as { k: TabKey; label: string }[]).map((t) => (
+          <button
+            key={t.k}
+            onClick={() => setTab(t.k)}
+            className={`px-5 py-3 text-sm transition border-b-2 -mb-px whitespace-nowrap ${
+              tab === t.k
+                ? "border-gold text-foreground"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "services" && (
+        <div className="max-w-2xl">
           <h2 className="font-display text-3xl text-foreground">Services</h2>
           <p className="text-sm text-muted-foreground mt-1">Tap to select before booking.</p>
           <ul className="mt-6 divide-y divide-border border border-border rounded-2xl overflow-hidden">
@@ -105,7 +150,7 @@ function SalonProfileContent({ salon }: { salon: Salon }) {
               return (
                 <li key={s.name}>
                   <button
-                    onClick={() => setSelectedService(s)}
+                    onClick={() => { setSelectedService(s); setTab("booking"); }}
                     className={`w-full flex items-center justify-between px-5 py-4 text-left transition ${
                       active ? "bg-secondary" : "hover:bg-secondary/40"
                     }`}
@@ -120,8 +165,43 @@ function SalonProfileContent({ salon }: { salon: Salon }) {
             })}
           </ul>
         </div>
+      )}
 
+      {tab === "stylists" && (
         <div>
+          <h2 className="font-display text-3xl text-foreground">Meet the Stylists</h2>
+          <p className="text-sm text-muted-foreground mt-1">Master artists trained at top international academies.</p>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {stylists.map((st) => (
+              <div key={st.name} className="rounded-2xl border border-border bg-card p-6 hover:border-gold/40 transition">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-[image:var(--gradient-gold)] grid place-items-center text-primary-foreground font-display text-xl">
+                    {st.name.split(" ").map((n) => n[0]).join("")}
+                  </div>
+                  <div>
+                    <p className="font-display text-xl text-foreground">{st.name}</p>
+                    <p className="text-xs text-gold uppercase tracking-widest">{st.title}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <Star className="w-3.5 h-3.5 text-gold fill-gold" /> {st.rating} · {st.years} yrs experience
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {st.specialties.map((sp) => (
+                    <span key={sp} className="text-[11px] uppercase tracking-wider text-muted-foreground px-2 py-1 rounded-full border border-border">
+                      {sp}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs text-muted-foreground italic">"{st.quote}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "booking" && (
+        <div className="max-w-3xl">
           <h2 className="font-display text-3xl text-foreground flex items-center gap-3">
             <Calendar className="w-6 h-6 text-gold" /> Select Time Slot
           </h2>
@@ -172,9 +252,23 @@ function SalonProfileContent({ salon }: { salon: Salon }) {
             Book Now · {selectedService.name} · ₹{selectedService.price.toLocaleString("en-IN")}
           </button>
         </div>
-      </section>
-
-      <Chatbot />
-    </main>
+      )}
+    </section>
   );
 }
+
+type Stylist = { name: string; title: string; rating: number; years: number; specialties: string[]; quote: string };
+
+function getStylists(salonId: string): Stylist[] {
+  const pool: Stylist[] = [
+    { name: "Anaya Mehra", title: "Creative Director", rating: 4.9, years: 12, specialties: ["Balayage", "Bridal"], quote: "Hair is the crown you never take off." },
+    { name: "Rohan Iyer", title: "Senior Stylist", rating: 4.8, years: 9, specialties: ["Precision Cuts", "Texture"], quote: "Every cut tells a story." },
+    { name: "Sara Kapoor", title: "Color Specialist", rating: 4.95, years: 14, specialties: ["Color", "Highlights"], quote: "Color is emotion made visible." },
+    { name: "Vikram Shetty", title: "Master Barber", rating: 4.85, years: 11, specialties: ["Beard", "Classic Cuts"], quote: "Sharp lines, sharper confidence." },
+    { name: "Priya Nair", title: "Spa Therapist", rating: 4.9, years: 8, specialties: ["Facials", "Skincare"], quote: "Glow comes from within — and within reach." },
+    { name: "Aditya Rao", title: "Makeup Artist", rating: 4.92, years: 10, specialties: ["Editorial", "Bridal"], quote: "Beauty in every brushstroke." },
+  ];
+  const start = (salonId.length * 3) % pool.length;
+  return [pool[start], pool[(start + 1) % pool.length], pool[(start + 2) % pool.length]];
+}
+

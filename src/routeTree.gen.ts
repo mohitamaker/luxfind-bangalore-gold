@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VendorDashboardRouteImport } from './routes/vendor-dashboard'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SalonsSalonIdRouteImport } from './routes/salons.$salonId'
 import { Route as BookSalonIdRouteImport } from './routes/book.$salonId'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const VendorDashboardRoute = VendorDashboardRouteImport.update({
+  id: '/vendor-dashboard',
+  path: '/vendor-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
@@ -44,6 +50,7 @@ const ApiChatRoute = ApiChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/partner': typeof PartnerRoute
+  '/vendor-dashboard': typeof VendorDashboardRoute
   '/api/chat': typeof ApiChatRoute
   '/book/$salonId': typeof BookSalonIdRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/partner': typeof PartnerRoute
+  '/vendor-dashboard': typeof VendorDashboardRoute
   '/api/chat': typeof ApiChatRoute
   '/book/$salonId': typeof BookSalonIdRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/partner': typeof PartnerRoute
+  '/vendor-dashboard': typeof VendorDashboardRoute
   '/api/chat': typeof ApiChatRoute
   '/book/$salonId': typeof BookSalonIdRoute
   '/salons/$salonId': typeof SalonsSalonIdRoute
@@ -68,15 +77,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/partner'
+    | '/vendor-dashboard'
     | '/api/chat'
     | '/book/$salonId'
     | '/salons/$salonId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/partner' | '/api/chat' | '/book/$salonId' | '/salons/$salonId'
+  to:
+    | '/'
+    | '/partner'
+    | '/vendor-dashboard'
+    | '/api/chat'
+    | '/book/$salonId'
+    | '/salons/$salonId'
   id:
     | '__root__'
     | '/'
     | '/partner'
+    | '/vendor-dashboard'
     | '/api/chat'
     | '/book/$salonId'
     | '/salons/$salonId'
@@ -85,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PartnerRoute: typeof PartnerRoute
+  VendorDashboardRoute: typeof VendorDashboardRoute
   ApiChatRoute: typeof ApiChatRoute
   BookSalonIdRoute: typeof BookSalonIdRoute
   SalonsSalonIdRoute: typeof SalonsSalonIdRoute
@@ -92,6 +110,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vendor-dashboard': {
+      id: '/vendor-dashboard'
+      path: '/vendor-dashboard'
+      fullPath: '/vendor-dashboard'
+      preLoaderRoute: typeof VendorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/partner': {
       id: '/partner'
       path: '/partner'
@@ -133,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PartnerRoute: PartnerRoute,
+  VendorDashboardRoute: VendorDashboardRoute,
   ApiChatRoute: ApiChatRoute,
   BookSalonIdRoute: BookSalonIdRoute,
   SalonsSalonIdRoute: SalonsSalonIdRoute,
