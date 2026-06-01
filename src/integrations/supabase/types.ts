@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      salons: {
+        Row: {
+          area: string
+          created_at: string
+          gallery: string[]
+          id: string
+          image_url: string | null
+          name: string
+          price_tier: string
+          rating: number
+          reviews: number
+          services: Json
+          tagline: string | null
+        }
+        Insert: {
+          area: string
+          created_at?: string
+          gallery?: string[]
+          id: string
+          image_url?: string | null
+          name: string
+          price_tier?: string
+          rating?: number
+          reviews?: number
+          services?: Json
+          tagline?: string | null
+        }
+        Update: {
+          area?: string
+          created_at?: string
+          gallery?: string[]
+          id?: string
+          image_url?: string | null
+          name?: string
+          price_tier?: string
+          rating?: number
+          reviews?: number
+          services?: Json
+          tagline?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
