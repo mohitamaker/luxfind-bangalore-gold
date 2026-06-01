@@ -1,32 +1,49 @@
-import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Star, MapPin, Calendar, ArrowLeft, Sparkles, Flame, TrendingDown } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Star, MapPin, Calendar, ArrowLeft, Sparkles, Flame, TrendingDown, AlertCircle } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { Chatbot } from "@/components/site/Chatbot";
-import { findSalon, generateSlots, type Service } from "@/lib/salons";
+import { fetchSalon, generateSlots, type Service, type Salon } from "@/lib/salons";
 
 export const Route = createFileRoute("/salons/$salonId")({
-  loader: ({ params }) => {
-    const salon = findSalon(params.salonId);
-    if (!salon) throw notFound();
-    return { salon };
-  },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.salon.name} — Maison` },
-      { name: "description", content: loaderData?.salon.tagline },
-    ],
+  head: ({ params }) => ({
+    meta: [{ title: `${params.salonId} — Maison` }],
   }),
   component: SalonProfile,
-  notFoundComponent: () => (
-    <div className="min-h-screen grid place-items-center text-foreground">
-      Salon not found. <Link to="/" className="text-gold ml-2">Go back</Link>
-    </div>
-  ),
 });
 
 function SalonProfile() {
-  const { salon } = Route.useLoaderData();
+  const { salonId } = Route.useParams();
+  const { data: salon, isLoading } = useQuery({
+    queryKey: ["salon", salonId],
+    queryFn: () => fetchSalon(salonId),
+  });
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Navbar />
+        <div className="pt-40 text-center text-muted-foreground">Loading salon…</div>
+      </main>
+    );
+  }
+
+  if (!salon) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Navbar />
+        <div className="pt-40 text-center text-muted-foreground">
+          Salon not found. <Link to="/" className="text-gold ml-2">Go back</Link>
+        </div>
+      </main>
+    );
+  }
+
+  return <SalonProfileContent salon={salon} />;
+}
+
+function SalonProfileContent({ salon }: { salon: Salon }) {
   const navigate = useNavigate();
   const slots = generateSlots();
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
@@ -68,10 +85,9 @@ function SalonProfile() {
         </div>
       </section>
 
-      {/* Gallery */}
       <section className="px-6 lg:px-10 mx-auto max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {salon.gallery.map((src: string, i: number) => (
+          {salon.gallery.map((src, i) => (
             <div key={i} className={`relative overflow-hidden rounded-2xl ${i === 0 ? "md:col-span-2 md:row-span-2 aspect-[16/10]" : "aspect-square"}`}>
               <img src={src} alt={`${salon.name} interior ${i + 1}`} loading={i === 0 ? "eager" : "lazy"} className="w-full h-full object-cover" />
             </div>
@@ -79,13 +95,12 @@ function SalonProfile() {
         </div>
       </section>
 
-      {/* Services + Booking */}
       <section className="px-6 lg:px-10 mx-auto max-w-7xl py-20 grid lg:grid-cols-2 gap-12">
         <div>
           <h2 className="font-display text-3xl text-foreground">Services</h2>
           <p className="text-sm text-muted-foreground mt-1">Tap to select before booking.</p>
           <ul className="mt-6 divide-y divide-border border border-border rounded-2xl overflow-hidden">
-            {salon.services.map((s: Service) => {
+            {salon.services.map((s) => {
               const active = selectedService.name === s.name;
               return (
                 <li key={s.name}>
@@ -117,6 +132,7 @@ function SalonProfile() {
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
             {slots.map((slot) => {
               const active = selectedSlot === slot.time;
+              const scarce = slot.tag === "peak" && (slot.slotsLeft ?? 0) <= 1;
               return (
                 <button
                   key={slot.time}
@@ -130,17 +146,18 @@ function SalonProfile() {
                   <div className="text-foreground font-medium">{slot.time}</div>
                   {slot.tag === "low" && (
                     <div className="mt-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-emerald-400">
-                      <TrendingDown className="w-3 h-3" /> {slot.discount}% Off · Low Demand
+                      <TrendingDown className="w-3 h-3" /> {slot.discount}% Off · Early Bird
                     </div>
                   )}
                   {slot.tag === "peak" && (
-                    <div className="mt-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-gold">
-                      <Flame className="w-3 h-3" /> Peak Hours
+                    <div className={`mt-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider ${scarce ? "text-red-400" : "text-gold"}`}>
+                      {scarce ? <AlertCircle className="w-3 h-3" /> : <Flame className="w-3 h-3" />}
+                      {scarce ? `Only ${slot.slotsLeft} left!` : `Peak · ${slot.slotsLeft} slots`}
                     </div>
                   )}
                   {slot.tag === "normal" && (
                     <div className="mt-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                      <Sparkles className="w-3 h-3" /> Standard
+                      <Sparkles className="w-3 h-3" /> {slot.slotsLeft} slots
                     </div>
                   )}
                 </button>
