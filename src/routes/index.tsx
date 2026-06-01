@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { FeaturedSalons } from "@/components/site/FeaturedSalons";
 import { Chatbot } from "@/components/site/Chatbot";
-import { filterSalons, salons } from "@/lib/salons";
+import { searchSalons } from "@/lib/salons";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -15,12 +16,6 @@ export const Route = createFileRoute("/")({
         content:
           "Discover and book Bangalore's most refined luxury salons, spas, and bridal ateliers — curated by Maison.",
       },
-      { property: "og:title", content: "Maison — Luxury Salons in Bangalore" },
-      {
-        property: "og:description",
-        content:
-          "Hand-picked luxury salons, spas and ateliers across Bangalore. Booked in seconds.",
-      },
     ],
   }),
   component: Index,
@@ -29,16 +24,16 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [query, setQuery] = useState({ area: "", service: "" });
 
-  const filtered = useMemo(() => {
-    if (!query.area && !query.service) return salons;
-    return filterSalons(query.area, query.service);
-  }, [query]);
+  const { data: salons = [], isLoading } = useQuery({
+    queryKey: ["salons", query.area, query.service],
+    queryFn: () => searchSalons(query.area, query.service),
+  });
 
   return (
     <main className="relative min-h-screen bg-background">
       <Navbar />
       <Hero onSearch={(area, service) => setQuery({ area, service })} />
-      <FeaturedSalons salons={filtered} query={query} />
+      <FeaturedSalons salons={salons} query={query} isLoading={isLoading} />
       <footer className="border-t border-border py-10 text-center text-xs uppercase tracking-[0.3em] text-muted-foreground">
         © {new Date().getFullYear()} Maison · Bangalore
       </footer>

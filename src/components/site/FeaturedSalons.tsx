@@ -2,9 +2,9 @@ import { Star, MapPin, ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Salon } from "@/lib/salons";
 
-type Props = { salons: Salon[]; query?: { area: string; service: string } };
+type Props = { salons: Salon[]; query?: { area: string; service: string }; isLoading?: boolean };
 
-export function FeaturedSalons({ salons, query }: Props) {
+export function FeaturedSalons({ salons, query, isLoading }: Props) {
   const hasQuery = query && (query.area || query.service);
 
   return (
