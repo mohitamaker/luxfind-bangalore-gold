@@ -1,9 +1,10 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { Chatbot } from "@/components/site/Chatbot";
-import { findSalon } from "@/lib/salons";
+import { fetchSalon, type Salon } from "@/lib/salons";
 
 type Search = { service?: string; time?: string };
 
@@ -12,22 +13,43 @@ export const Route = createFileRoute("/book/$salonId")({
     service: typeof s.service === "string" ? s.service : undefined,
     time: typeof s.time === "string" ? s.time : undefined,
   }),
-  loader: ({ params }) => {
-    const salon = findSalon(params.salonId);
-    if (!salon) throw notFound();
-    return { salon };
-  },
   head: () => ({ meta: [{ title: "Checkout — Maison" }] }),
   component: Booking,
 });
 
 function Booking() {
-  const { salon } = Route.useLoaderData();
+  const { salonId } = Route.useParams();
+  const { data: salon, isLoading } = useQuery({
+    queryKey: ["salon", salonId],
+    queryFn: () => fetchSalon(salonId),
+  });
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Navbar />
+        <div className="pt-40 text-center text-muted-foreground">Loading…</div>
+      </main>
+    );
+  }
+  if (!salon) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Navbar />
+        <div className="pt-40 text-center text-muted-foreground">
+          Salon not found. <Link to="/" className="text-gold ml-2">Go back</Link>
+        </div>
+      </main>
+    );
+  }
+  return <BookingContent salon={salon} />;
+}
+
+function BookingContent({ salon }: { salon: Salon }) {
   const { service: serviceName, time } = Route.useSearch();
   const [confirmed, setConfirmed] = useState(false);
 
-  const service =
-    salon.services.find((s: { name: string }) => s.name === serviceName) ?? salon.services[0];
+  const service = salon.services.find((s) => s.name === serviceName) ?? salon.services[0];
   const cost = service.price;
   const platformFee = Math.round(cost * 0.1);
   const total = cost + platformFee;
