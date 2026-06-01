@@ -56,7 +56,7 @@ export async function searchSalons(area: string, service: string): Promise<Salon
   if (a) query = query.ilike("area", `%${a}%`);
   const { data, error } = await query;
   if (error) throw error;
-  let rows = (data ?? []) as Row[];
+  let rows = (data ?? []) as unknown as Row[];
   if (s) {
     const needle = s.toLowerCase();
     rows = rows.filter(
@@ -71,7 +71,7 @@ export async function searchSalons(area: string, service: string): Promise<Salon
 export async function fetchSalon(id: string): Promise<Salon | null> {
   const { data, error } = await supabase.from("salons").select("*").eq("id", id).maybeSingle();
   if (error) throw error;
-  return data ? toSalon(data as Row) : null;
+  return data ? toSalon(data as unknown as Row) : null;
 }
 
 export type Slot = { time: string; tag: "peak" | "low" | "normal"; discount?: number; slotsLeft?: number };

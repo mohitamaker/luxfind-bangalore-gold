@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Sparkles, X, ArrowRight } from "lucide-react";
-import { salons } from "@/lib/salons";
+import { searchSalons, type Salon } from "@/lib/salons";
 
 const questions = [
   {
@@ -39,7 +40,12 @@ export function StyleQuiz() {
   }
 
   // Pick a recommended salon based on first answer (budget tier)
-  const recommended =
+  const { data: salons = [] } = useQuery({
+    queryKey: ["salons", "", ""],
+    queryFn: () => searchSalons("", ""),
+  });
+
+  const recommended: Salon | undefined =
     answers[0]?.includes("Ultra")
       ? salons.find((s) => s.priceTier === "₹₹₹₹") ?? salons[0]
       : answers[0]?.includes("Premium")
@@ -89,7 +95,7 @@ export function StyleQuiz() {
                   ))}
                 </div>
               </div>
-            ) : (
+            ) : recommended ? (
               <div className="text-center">
                 <Sparkles className="w-8 h-8 text-gold mx-auto" />
                 <h3 className="mt-3 font-display text-3xl text-foreground">
@@ -117,6 +123,8 @@ export function StyleQuiz() {
                   Retake quiz
                 </button>
               </div>
+            ) : (
+              <p className="text-center text-muted-foreground py-10">Loading recommendation…</p>
             )}
           </div>
         </div>
