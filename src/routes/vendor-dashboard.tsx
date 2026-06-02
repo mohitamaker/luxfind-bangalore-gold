@@ -10,8 +10,8 @@ import { useAuth } from "@/lib/auth";
 export const Route = createFileRoute("/vendor-dashboard")({
   head: () => ({
     meta: [
-      { title: "Vendor Dashboard — Maison" },
-      { name: "description", content: "Manage your salon's appointments, revenue, and customer requests on Maison." },
+      { title: "Vendor Dashboard — Cotérie" },
+      { name: "description", content: "Manage your salon's appointments, revenue, and customer requests on Cotérie." },
     ],
   }),
   component: VendorDashboard,
@@ -92,13 +92,13 @@ function VendorDashboard() {
             <h1 className="mt-2 font-display text-4xl lg:text-5xl text-foreground">
               Welcome back, {user.name}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">Maison · Indiranagar Atelier</p>
+            <p className="mt-1 text-sm text-muted-foreground">Cotérie · Indiranagar Atelier</p>
           </div>
           <Link
             to="/"
             className="text-xs uppercase tracking-widest text-muted-foreground hover:text-gold"
           >
-            ← Back to Maison
+            ← Back to Cotérie
           </Link>
         </div>
       </section>

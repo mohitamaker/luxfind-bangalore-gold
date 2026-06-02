@@ -6,6 +6,8 @@ import salon5 from "@/assets/salon-5.jpg";
 import salon6 from "@/assets/salon-6.jpg";
 import salon7 from "@/assets/salon-7.jpg";
 import salon8 from "@/assets/salon-8.jpg";
+import salon9 from "@/assets/salon-9.jpg";
+import salon10 from "@/assets/salon-10.jpg";
 import { supabase } from "@/integrations/supabase/client";
 
 export type Service = { name: string; price: number };
@@ -26,6 +28,7 @@ export type Salon = {
 const IMAGE_MAP: Record<string, string> = {
   "salon-1": salon1, "salon-2": salon2, "salon-3": salon3, "salon-4": salon4,
   "salon-5": salon5, "salon-6": salon6, "salon-7": salon7, "salon-8": salon8,
+  "salon-9": salon9, "salon-10": salon10,
 };
 
 export function resolveImage(key: string | null | undefined): string {
