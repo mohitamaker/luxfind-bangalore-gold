@@ -18,7 +18,7 @@ export const Route = createFileRoute("/book/$salonId")({
     service: typeof s.service === "string" ? s.service : undefined,
     time: typeof s.time === "string" ? s.time : undefined,
   }),
-  head: () => ({ meta: [{ title: "Checkout — Maison" }] }),
+  head: () => ({ meta: [{ title: "Checkout — Cotérie" }] }),
   component: Booking,
 });
 
@@ -165,7 +165,7 @@ function BookingContent({ salon }: { salon: Salon }) {
             </p>
             <p className="inline-flex items-center gap-2">
               <Shield className="w-3.5 h-3.5 text-gold/80" />
-              Maison Guarantee · refund if the salon is not as described.
+              Cotérie Guarantee · refund if the salon is not as described.
             </p>
           </div>
         </div>
@@ -238,7 +238,7 @@ function SuccessOverlay({ salon, service, time, total }: { salon: Salon; service
           to="/"
           className="mt-8 inline-flex items-center justify-center px-6 py-3 rounded-full bg-[image:var(--gradient-gold)] text-primary-foreground text-sm"
         >
-          Back to Maison
+          Back to Cotérie
         </Link>
       </div>
     </div>

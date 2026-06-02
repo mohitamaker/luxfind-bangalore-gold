@@ -32,7 +32,7 @@ export function FeaturedSalons({ salons, query, isLoading }: Props) {
             <div className="h-px w-12 bg-gold/40 mb-6" />
             <p className="prose-luxe text-muted-foreground text-sm leading-relaxed font-light">
               Every house in our collection has been visited, vetted, and
-              quietly approved by the Maison team. No paid placements. No noise.
+              quietly approved by the Cotérie team. No paid placements. No noise.
             </p>
           </div>
         </div>
