@@ -12,36 +12,42 @@ export function Hero({ onSearch }: Props) {
   const [service, setService] = useState("");
 
   return (
-    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={heroImage}
           alt="Luxury salon interior with marble and gold accents"
           width={1920}
           height={1280}
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-40 luxe-transition"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_85%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-10 text-center pt-32 pb-24">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/30 bg-background/40 backdrop-blur text-xs uppercase tracking-[0.25em] text-gold">
-          <span className="w-1 h-1 rounded-full bg-gold" />
-          Bangalore's Curated Salon Marketplace
-        </span>
+      <div className="relative mx-auto max-w-[1400px] w-full px-8 lg:px-14 pt-44 pb-32">
+        <div className="grid lg:grid-cols-12 gap-16 items-end">
+          <div className="lg:col-span-8">
+            <span className="eyebrow text-gold flex items-center gap-3">
+              <span className="w-8 h-px bg-gold/60" />
+              Bangalore · Est. 2026
+            </span>
 
-        <h1 className="mt-8 font-display text-5xl sm:text-6xl lg:text-8xl leading-[1.02] text-foreground">
-          Where the city's most{" "}
-          <span className="italic text-gold">refined</span>
-          <br />
-          salons find you.
-        </h1>
+            <h1 className="mt-10 font-display text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.95] text-foreground font-light">
+              Where the city's<br />
+              most <em className="text-gold not-italic font-normal" style={{ fontStyle: "italic" }}>refined</em><br />
+              salons find you.
+            </h1>
+          </div>
 
-        <p className="mt-6 max-w-xl mx-auto text-base sm:text-lg text-muted-foreground">
-          Discover hand-picked luxury salons, spas, and ateliers across Bangalore — booked
-          in seconds, indulged in for hours.
-        </p>
+          <div className="lg:col-span-4 lg:pb-6">
+            <div className="h-px w-16 bg-gold/40 mb-8" />
+            <p className="prose-luxe text-muted-foreground text-base leading-relaxed font-light">
+              An invitation-only directory of Bangalore's most accomplished
+              salons, spas, and bridal ateliers — vetted by hand, booked in
+              seconds.
+            </p>
+          </div>
+        </div>
 
         <form
           onSubmit={(e) => {
@@ -49,41 +55,51 @@ export function Hero({ onSearch }: Props) {
             onSearch(area, service);
             document.getElementById("salons")?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="mt-12 mx-auto max-w-2xl"
+          className="mt-24 max-w-4xl"
         >
-          <div className="flex flex-col sm:flex-row items-stretch gap-2 p-2 rounded-2xl bg-card/80 backdrop-blur-xl border border-gold/20 shadow-[var(--shadow-luxe)]">
-            <div className="flex items-center gap-3 flex-1 px-4 py-3 border-b sm:border-b-0 sm:border-r border-border">
-              <MapPin className="w-4 h-4 text-gold shrink-0" strokeWidth={1.5} />
-              <input
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-                type="text"
-                placeholder="Area — Indiranagar, Koramangala…"
-                className="w-full bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground"
-              />
+          <div className="flex flex-col sm:flex-row items-stretch border-t border-b border-[rgba(255,255,255,0.08)] bg-background/30 backdrop-blur-md">
+            <div className="flex items-center gap-4 flex-1 px-6 py-6 border-b sm:border-b-0 sm:border-r border-[rgba(255,255,255,0.08)]">
+              <MapPin className="w-4 h-4 text-gold/70 shrink-0" strokeWidth={1.25} />
+              <div className="flex-1">
+                <div className="eyebrow text-muted-foreground mb-1">Neighbourhood</div>
+                <input
+                  value={area}
+                  onChange={(e) => setArea(e.target.value)}
+                  type="text"
+                  placeholder="Indiranagar, Koramangala…"
+                  className="w-full bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-3 flex-1 px-4 py-3">
-              <Search className="w-4 h-4 text-gold shrink-0" strokeWidth={1.5} />
-              <input
-                value={service}
-                onChange={(e) => setService(e.target.value)}
-                type="text"
-                placeholder="Service — Haircut, Spa, Bridal…"
-                className="w-full bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground"
-              />
+            <div className="flex items-center gap-4 flex-1 px-6 py-6">
+              <Search className="w-4 h-4 text-gold/70 shrink-0" strokeWidth={1.25} />
+              <div className="flex-1">
+                <div className="eyebrow text-muted-foreground mb-1">Service</div>
+                <input
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                  type="text"
+                  placeholder="Haircut, Spa, Bridal…"
+                  className="w-full bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
+                />
+              </div>
             </div>
             <button
               type="submit"
-              className="px-7 py-3 rounded-xl text-sm font-medium text-primary-foreground bg-[image:var(--gradient-gold)] hover:brightness-110 transition shadow-[var(--shadow-gold)]"
+              className="eyebrow px-10 py-6 text-background bg-gold hover:bg-[#c5a880] luxe-transition"
             >
-              Search
+              Discover
             </button>
           </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-10">
             <StyleQuiz />
           </div>
         </form>
+      </div>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 eyebrow text-muted-foreground/60">
+        Scroll to explore
       </div>
     </section>
   );
