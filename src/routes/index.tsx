@@ -34,8 +34,27 @@ function Index() {
       <Navbar />
       <Hero onSearch={(area, service) => setQuery({ area, service })} />
       <FeaturedSalons salons={salons} query={query} isLoading={isLoading} />
-      <footer className="border-t border-border py-10 text-center text-xs uppercase tracking-[0.3em] text-muted-foreground">
-        © {new Date().getFullYear()} Maison · Bangalore
+      <footer className="border-t border-[rgba(255,255,255,0.06)]">
+        <div className="mx-auto max-w-[1400px] px-8 lg:px-14 py-20 grid md:grid-cols-3 gap-12 items-start">
+          <div>
+            <div className="font-display text-2xl font-light text-foreground">Maison<span className="text-gold">.</span></div>
+            <p className="mt-4 text-sm text-muted-foreground font-light prose-luxe">A quiet directory of Bangalore's most refined salons & ateliers.</p>
+          </div>
+          <div className="eyebrow text-muted-foreground space-y-3">
+            <div className="text-foreground/80">Navigate</div>
+            <div>The Collection</div>
+            <div>For Partners</div>
+            <div>Vendor Portal</div>
+          </div>
+          <div className="eyebrow text-muted-foreground space-y-3 md:text-right">
+            <div className="text-foreground/80">Contact</div>
+            <div>concierge@maison.bg</div>
+            <div>Bangalore, India</div>
+          </div>
+        </div>
+        <div className="border-t border-[rgba(255,255,255,0.06)] py-8 text-center eyebrow text-muted-foreground/60">
+          © {new Date().getFullYear()} Maison — All rights reserved
+        </div>
       </footer>
       <Chatbot />
     </main>
