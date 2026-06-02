@@ -1,61 +1,79 @@
-import { Scissors, LogOut, LayoutDashboard, User as UserIcon } from "lucide-react";
+import { LogOut, LayoutDashboard, User as UserIcon } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 
 export function Navbar() {
   const { user, openAuth, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="grid place-items-center w-9 h-9 rounded-full border border-gold/40 bg-background/40 backdrop-blur">
-            <Scissors className="w-4 h-4 text-gold" strokeWidth={1.5} />
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 luxe-transition ${
+        scrolled
+          ? "bg-background/70 backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto max-w-[1400px] px-8 lg:px-14 py-5 flex items-center justify-between">
+        <Link to="/" className="group flex items-baseline gap-2">
+          <span className="font-display text-2xl tracking-tight text-foreground font-light">
+            Maison
           </span>
-          <span className="font-display text-xl tracking-wide text-foreground">
-            Maison<span className="text-gold">.</span>
-          </span>
+          <span className="text-gold text-xs">●</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-10 text-sm text-muted-foreground">
-          <Link to="/" hash="salons" className="hover:text-gold transition-colors">Find Salons</Link>
-          <Link to="/partner" className="hover:text-gold transition-colors">For Partners</Link>
-          <Link to="/vendor-dashboard" className="hover:text-gold transition-colors">Vendor Portal</Link>
+        <nav className="hidden md:flex items-center gap-12">
+          <Link to="/" hash="salons" className="eyebrow text-muted-foreground hover:text-gold luxe-transition">
+            The Collection
+          </Link>
+          <Link to="/partner" className="eyebrow text-muted-foreground hover:text-gold luxe-transition">
+            For Partners
+          </Link>
+          <Link to="/vendor-dashboard" className="eyebrow text-muted-foreground hover:text-gold luxe-transition">
+            Vendor Portal
+          </Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-6">
           {user ? (
             <div className="relative">
               <button
                 onClick={() => setOpen((o) => !o)}
-                className="flex items-center gap-2 px-3 py-2 rounded-full border border-gold/30 bg-background/40 backdrop-blur text-sm text-foreground hover:border-gold/60 transition"
+                className="flex items-center gap-3 eyebrow text-foreground/80 hover:text-gold luxe-transition"
               >
-                <span className="w-6 h-6 rounded-full bg-[image:var(--gradient-gold)] grid place-items-center text-[10px] font-medium text-primary-foreground uppercase">
+                <span className="w-8 h-8 border border-[rgba(255,255,255,0.12)] grid place-items-center text-[10px] text-gold uppercase">
                   {user.name.charAt(0)}
                 </span>
                 <span className="hidden sm:inline">{user.name}</span>
               </button>
               {open && (
                 <div
-                  className="absolute right-0 mt-2 w-56 rounded-2xl border border-border bg-card p-2 shadow-[var(--shadow-luxe)]"
+                  className="absolute right-0 mt-3 w-60 border border-[rgba(255,255,255,0.08)] bg-background/95 backdrop-blur-xl p-1"
                   onMouseLeave={() => setOpen(false)}
                 >
-                  <div className="px-3 py-2 text-xs text-muted-foreground border-b border-border mb-1">
+                  <div className="px-4 py-3 eyebrow text-muted-foreground border-b border-[rgba(255,255,255,0.06)] mb-1">
                     {user.email}
                   </div>
                   <MenuLink to="/" onClick={() => setOpen(false)}>
-                    <UserIcon className="w-4 h-4 text-gold/70" /> My Bookings
+                    <UserIcon className="w-3.5 h-3.5 text-gold/70" /> My Bookings
                   </MenuLink>
                   <MenuLink to="/vendor-dashboard" onClick={() => setOpen(false)}>
-                    <LayoutDashboard className="w-4 h-4 text-gold/70" /> Vendor Dashboard
+                    <LayoutDashboard className="w-3.5 h-3.5 text-gold/70" /> Vendor Dashboard
                   </MenuLink>
                   <button
                     onClick={() => { setOpen(false); signOut(); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground transition"
+                    className="w-full flex items-center gap-2 px-4 py-3 eyebrow text-muted-foreground hover:bg-white/[0.03] hover:text-foreground luxe-transition"
                   >
-                    <LogOut className="w-4 h-4" /> Sign Out
+                    <LogOut className="w-3.5 h-3.5" /> Sign Out
                   </button>
                 </div>
               )}
@@ -63,16 +81,16 @@ export function Navbar() {
           ) : (
             <button
               onClick={openAuth}
-              className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-gold transition"
+              className="hidden sm:inline-flex eyebrow text-muted-foreground hover:text-gold luxe-transition"
             >
               Sign In
             </button>
           )}
           <Link
             to="/partner"
-            className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-primary-foreground bg-[image:var(--gradient-gold)] shadow-[var(--shadow-gold)] hover:brightness-110 transition"
+            className="group relative eyebrow text-foreground border border-[rgba(255,255,255,0.15)] hover:border-gold px-6 py-3 luxe-transition hover:text-gold"
           >
-            Partner with Us
+            Partner With Us
           </Link>
         </div>
       </div>
@@ -85,7 +103,7 @@ function MenuLink({ to, children, onClick }: { to: string; children: React.React
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-foreground hover:bg-secondary transition"
+      className="flex items-center gap-2 px-4 py-3 eyebrow text-foreground/80 hover:bg-white/[0.03] hover:text-gold luxe-transition"
     >
       {children}
     </Link>
