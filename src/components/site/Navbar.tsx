@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 
-export const BRAND = "Cotérie";
+export const BRAND = "Maison Bangalore";
 
 export function Navbar() {
   const { user, openAuth, signOut } = useAuth();

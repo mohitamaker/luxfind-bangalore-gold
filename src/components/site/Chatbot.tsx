@@ -9,7 +9,7 @@ export function Chatbot() {
     {
       role: "assistant",
       content:
-        "Welcome to Cotérie. I'm your Luxury Concierge — tell me what service you need today, and I'll match you with the perfect salon in Bangalore.",
+        "Welcome to Maison Bangalore. I'm your Luxury Concierge — tell me what service you need today, and I'll match you with the perfect salon in Bangalore.",
     },
   ]);
   const [input, setInput] = useState("");

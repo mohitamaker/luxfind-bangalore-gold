@@ -39,7 +39,7 @@ export function AuthModal() {
             <Sparkles className="w-5 h-5 text-gold" />
           </div>
           <h2 className="mt-4 font-display text-3xl text-foreground">
-            {mode === "signin" ? "Welcome back" : "Join Cotérie"}
+            {mode === "signin" ? "Welcome back" : "Join Maison Bangalore"}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "signin"
@@ -98,7 +98,7 @@ export function AuthModal() {
         </form>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          {mode === "signin" ? "New to Cotérie?" : "Already have an account?"}{" "}
+          {mode === "signin" ? "New to Maison Bangalore?" : "Already have an account?"}{" "}
           <button
             onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
             className="text-gold hover:underline"
