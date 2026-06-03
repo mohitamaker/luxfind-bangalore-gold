@@ -13,7 +13,7 @@ export function Hero({ onSearch }: Props) {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 animate-luxe-fade-up">
         <img
           src={heroImage}
           alt="Luxury salon interior with marble and gold accents"
