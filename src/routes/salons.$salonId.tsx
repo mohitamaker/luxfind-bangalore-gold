@@ -8,7 +8,7 @@ import { fetchSalon, generateSlots, type Service, type Salon } from "@/lib/salon
 
 export const Route = createFileRoute("/salons/$salonId")({
   head: ({ params }) => ({
-    meta: [{ title: `${params.salonId} — Cotérie` }],
+    meta: [{ title: `${params.salonId} — Maison Bangalore` }],
   }),
   component: SalonProfile,
 });

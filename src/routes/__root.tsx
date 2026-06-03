@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Bangalore Luxury Hub is a premium marketplace for discovering and booking luxury salons in Bangalore." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@CoterieLuxury" },
+      { name: "twitter:site", content: "@MaisonBangalore" },
       { name: "twitter:title", content: "Bangalore Luxury Hub" },
       { name: "twitter:description", content: "Bangalore Luxury Hub is a premium marketplace for discovering and booking luxury salons in Bangalore." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9f7fa611-80dc-4488-9446-d12c92da5606/id-preview-4bc8545b--a3cb30dc-774e-4086-8886-8bf564716586.lovable.app-1780247005597.png" },

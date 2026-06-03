@@ -7,7 +7,7 @@ import { Chatbot } from "@/components/site/Chatbot";
 export const Route = createFileRoute("/partner")({
   head: () => ({
     meta: [
-      { title: "Partner with Cotérie — List your salon" },
+      { title: "Partner with Maison Bangalore — List your salon" },
       { name: "description", content: "Join Bangalore's curated luxury salon marketplace. Apply to be listed." },
     ],
   }),
@@ -41,7 +41,7 @@ function Partner() {
           Join the city's most <span className="italic text-gold">refined</span> marketplace.
         </h1>
         <p className="mt-4 text-muted-foreground max-w-xl">
-          Cotérie curates Bangalore's best salons. Apply to be listed — our team will visit and approve your space.
+          Maison Bangalore curates Bangalore's best salons. Apply to be listed — our team will visit and approve your space.
         </p>
 
         {submitted ? (
