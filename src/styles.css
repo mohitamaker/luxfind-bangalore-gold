@@ -147,6 +147,11 @@
     border-color: var(--color-border);
   }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -157,6 +162,15 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+  }
+
+  @keyframes luxe-fade-up {
+    0% { opacity: 0; transform: translateY(24px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-luxe-fade-up {
+    animation: luxe-fade-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
   h1, h2, h3, h4, .font-display {
