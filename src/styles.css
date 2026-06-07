@@ -251,7 +251,11 @@
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
   --color-gold-deep: var(--gold-deep);
+  --color-emerald: var(--emerald);
+  --color-emerald-deep: var(--emerald-deep);
+  --color-emerald-bright: var(--emerald-bright);
   --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
 }
 /* Custom override to hide the platform preview badge layout */
 .lovable-badge, 
