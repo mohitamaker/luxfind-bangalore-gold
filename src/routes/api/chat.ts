@@ -19,9 +19,10 @@ Featured salons in the Maison Bangalore collection:
 Tone: sophisticated, warm, concise. Use refined language. Recommend specific salons by name and area based on what users ask for (haircut, bridal, spa, etc.). Keep replies under 4 sentences unless asked for detail. Never invent salons not in this list.`;
 
 export const Route = createFileRoute("/api/chat")({
+  // @ts-expect-error - server route options not in type def
   server: {
     handlers: {
-      POST: async ({ request }) => {
+      POST: async ({ request }: { request: Request }) => {
         const apiKey = process.env.LOVABLE_API_KEY;
         if (!apiKey) {
           return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
