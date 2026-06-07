@@ -32,11 +32,11 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-14 h-16 sm:h-20 flex items-center justify-between gap-4">
-        <Link to="/" className="group flex items-baseline gap-1.5 shrink-0" onClick={() => setMobileOpen(false)}>
-          <span className="font-display text-xl sm:text-2xl tracking-tight text-foreground font-light">
-            {BRAND}
+        <Link to="/" className="group flex items-baseline gap-2 shrink-0" onClick={() => setMobileOpen(false)}>
+          <span className="font-display text-xl sm:text-2xl tracking-tight text-foreground font-semibold">
+            Maison <span className="gold-text italic font-normal">Bangalore</span>
           </span>
-          <span className="text-gold text-xs">●</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-10">
